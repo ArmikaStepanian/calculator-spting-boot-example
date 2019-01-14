@@ -1,0 +1,176 @@
+package ru.stepanian.calc.config;
+
+import com.jtattoo.plaf.texture.TextureLookAndFeel;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import ru.stepanian.calc.components.MyFrame;
+import ru.stepanian.calc.components.MyPanel;
+import ru.stepanian.calc.listeners.CalcFieldsFocusListener;
+import ru.stepanian.calc.listeners.CalculatorListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.LineBorder;
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+import java.util.Arrays;
+
+@Configuration
+public class MyConfig {
+
+    @Bean
+    public JTextField field1() {
+        JTextField myField = new JTextField();
+        myField.setText("add number");
+        return myField;
+    }
+
+    @Bean
+    public JTextField field2() {
+        JTextField myField = new JTextField();
+        myField.setText("add number");
+        return myField;
+    }
+
+    @Bean
+    public JTextField fieldResult() {
+        JTextField myField = new JTextField();
+        myField.setEditable(false);
+        myField.setFocusable(false);
+        return myField;
+    }
+
+    @Bean
+    public JButton buttonPlus() {
+        JButton m = new JButton();
+        m.setText("+");
+        m.addActionListener(calculatorListener());
+        return m;
+    }
+
+    @Bean
+    public JButton buttonMinus() {
+        JButton m = new JButton();
+        m.setText("-");
+        m.addActionListener(calculatorListener());
+        return m;
+    }
+
+    @Bean
+    public JButton buttonMultiply() {
+        JButton m = new JButton();
+        m.setText("*");
+        m.addActionListener(calculatorListener());
+        return m;
+    }
+
+    @Bean
+    public JButton buttonDivide() {
+        JButton m = new JButton();
+        m.setText("/");
+        m.addActionListener(calculatorListener());
+        return m;
+    }
+
+    @Bean
+    public JButton buttonClean() {
+        JButton m = new JButton();
+        m.setText("C");
+        m.addActionListener(calculatorListener());
+        return m;
+    }
+
+    @Bean
+    public JLabel labelNumber1() {
+        return new JLabel("Number 1:");
+    }
+
+    @Bean
+    public JLabel labelNumber2() {
+        return new JLabel("Number 2:");
+    }
+
+    @Bean
+    public JLabel labelResult() {
+        return new JLabel("Result:");
+    }
+
+    @Bean
+    public GridLayout gridLayout1() {
+        return new GridLayout(6, 0);
+    }
+
+    @Bean
+    public GridLayout gridLayout2() {
+        return new GridLayout(5, 0);
+    }
+
+    @Bean
+    public GridLayout gridLayout3() {
+        return new GridLayout(0, 2);
+    }
+
+    @Bean
+    public ActionListener calculatorListener() {
+        return new CalculatorListener(field1(), field2(), fieldResult());
+    }
+
+    @Bean
+    public CalcFieldsFocusListener calcFieldsFocusListener1() {
+        CalcFieldsFocusListener c = new CalcFieldsFocusListener(field1());
+        field1().addFocusListener(c);
+        return c;
+    }
+
+    @Bean
+    public CalcFieldsFocusListener calcFieldsFocusListener2() {
+        CalcFieldsFocusListener c = new CalcFieldsFocusListener(field2());
+        field2().addFocusListener(c);
+        return c;
+    }
+
+    @Bean
+    public MyFrame myFrame() {
+        MyFrame myFrame = new MyFrame("Calculator", 300, 200);
+        myFrame.setContentPane(mainPanel());
+        return myFrame;
+    }
+
+    @Bean
+    public LineBorder lineBorder() {
+        return new LineBorder(Color.BLACK);
+    }
+
+    @Bean
+    public MyPanel mainPanel() {
+        return new MyPanel(gridLayout3(), Arrays.asList(p1(), p2()), lineBorder());
+    }
+
+    @Bean
+    public MyPanel p1() {
+        return new MyPanel(gridLayout1(), Arrays.asList(labelNumber1(), field1(), labelNumber2(), field2(), labelResult(), fieldResult()), lineBorder());
+    }
+
+    @Bean
+    public MyPanel p2() {
+        return new MyPanel(gridLayout2(), Arrays.asList(buttonClean(), buttonDivide(), buttonMinus(), buttonMultiply(), buttonPlus()), lineBorder());
+    }
+
+
+    @Bean
+    public String launch(MyPanel p1, MyPanel p2, MyPanel mainPanel, MyFrame myFrame) throws UnsupportedLookAndFeelException {
+        UIManager.setLookAndFeel(new TextureLookAndFeel());
+        JFrame.setDefaultLookAndFeelDecorated(true);
+        p1.init();
+        p2.init();
+        mainPanel.init();
+        myFrame.init();
+        return "";
+    }
+
+}
