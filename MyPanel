@@ -1,0 +1,30 @@
+package ru.stepanian.calc.components;
+
+import javax.swing.*;
+import javax.swing.border.LineBorder;
+import java.awt.*;
+import java.util.Iterator;
+import java.util.List;
+
+/**
+ * Created by 1 on 02.02.2016.
+ */
+public class MyPanel extends JPanel {
+
+    private List panelComponents;
+    private LineBorder lineBorder;
+
+    public MyPanel(LayoutManager layout, List panelComponents, LineBorder lineBorder) {
+        super(layout);
+        this.panelComponents = panelComponents;
+        this.lineBorder = lineBorder;
+    }
+
+    public void init() {
+
+        for (Iterator iter = this.panelComponents.iterator(); iter.hasNext();) {
+            Component component = (Component) iter.next();
+            add(component);
+        }
+    }
+}
